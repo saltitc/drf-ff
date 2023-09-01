@@ -7,6 +7,7 @@ from .models import Post
 from rest_framework import permissions
 from rest_framework import pagination
 from rest_framework import generics
+from rest_framework import filters
 from taggit.models import Tag
 from .serializers import TagSerializer
 from rest_framework.views import APIView
@@ -20,6 +21,8 @@ class PageNumberSetPagination(pagination.PageNumberPagination):
 
 
 class PostViewSet(viewsets.ModelViewSet):
+    search_fields = ['content', 'title']
+    filter_backends = (filters.SearchFilter,)
     serializer_class = PostSerializer
     queryset = Post.objects.all()
     lookup_field = 'slug'
