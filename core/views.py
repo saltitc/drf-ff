@@ -2,13 +2,13 @@ from django.conf import settings
 from rest_framework import viewsets
 from rest_framework.response import Response
 from .serializers import PostSerializer, ContactSerializer, RegisterSerializer, UserSerializer
-from .models import Post
+from .models import Post, Comment
 from rest_framework import permissions
 from rest_framework import pagination
 from rest_framework import generics
 from rest_framework import filters
 from taggit.models import Tag
-from .serializers import TagSerializer
+from .serializers import TagSerializer, CommentSerializer
 from rest_framework.views import APIView
 from django.core.mail import send_mail
 
@@ -93,3 +93,14 @@ class ProfileView(generics.GenericAPIView):
         return Response({
             "user": UserSerializer(request.user, context=self.get_serializer_context()).data,
         })
+
+
+class CommentView(generics.ListCreateAPIView):
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        post_slug = self.kwargs['post_slug'].lower()
+        post = Post.objects.get(slug=post_slug)
+        return Comment.objects.filter(post=post)
