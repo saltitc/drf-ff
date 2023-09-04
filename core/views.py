@@ -75,7 +75,7 @@ class RegisterView(generics.GenericAPIView):
     permission_classes = [permissions.AllowAny]
     serializer_class = RegisterSerializer
 
-    def post(self, request, *args,  **kwargs):
+    def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.save()
@@ -89,7 +89,7 @@ class ProfileView(generics.GenericAPIView):
     permission_classes = [permissions.IsAuthenticated]
     serializer_class = UserSerializer
 
-    def get(self, request, *args,  **kwargs):
+    def get(self, request, *args, **kwargs):
         return Response({
             "user": UserSerializer(request.user, context=self.get_serializer_context()).data,
         })
@@ -98,9 +98,15 @@ class ProfileView(generics.GenericAPIView):
 class CommentView(generics.ListCreateAPIView):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.AllowAny]
 
     def get_queryset(self):
         post_slug = self.kwargs['post_slug'].lower()
         post = Post.objects.get(slug=post_slug)
         return Comment.objects.filter(post=post)
+
+
+class AddCommentView(generics.CreateAPIView):
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer
+    permission_classes = [permissions.IsAuthenticated]
