@@ -1,9 +1,8 @@
-# Blog drf project
 
 ## Project description
 
 This project is an api written in the DRF framework. 
-The frontend is made with NuxtJS, it is stored in another [repository](https://github.com/saltitc/nuxtjs_blog). 
+The frontend is made with NuxtJS, it is stored in another [repository](https://github.com/saltitc/nuxtjs_ff). 
 You can use Postman to test it, or you can clone an additional repository with the frontend.
 
 ## Getting Started
